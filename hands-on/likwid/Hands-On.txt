@@ -1,0 +1,42 @@
+# Introduction
+
+The NPB folder contains three benchmarks from the NAS Parallel Benchmark suite.
+The codes are already adapted to contain one marked code region using LIKWID's MarkerAPI.
+
+Benchmarks
+- bt-mz
+- sp-mz
+- lu-mz
+
+# Compilation
+
+$ source /home/hpc/vihps-tw44/setup.sh
+$ tar -xj NPB.tar.bz2
+$ cd NPB
+$ make <benchmark> CLASS=<class> NPROCS=<number_of_MPI_processes>
+
+The binary will be located in the bin.likwid folder.
+
+# Running
+
+Since all the benchmarks are MPI based, you have to use likwid-mpirun to run them.
+likwid-mpirun is a wrapper for the different MPI starter mechanisms.
+
+## Run the application pinned to individual cores (MPI-only)
+
+$ likwid-mpirun -np <number_of_MPI_processes> <binary>
+
+## Run the application pinned to individual cores in a hybrid setup
+
+$ likwid-mpirun -np <number_of_MPI_processes> -t <number_of_OMP_threads> <binary>
+
+## Run the application, pin it and measure hardware performance events for the whole application run
+
+$ likwid-mpirun -np <mpi_procs> -t <omp_procs> -g <eventset> <binary>
+
+For available eventsets, see 'likwid-perfctr -a' on a target node
+
+## After instrumentation, run the application, pin it and measure hardware performance events for a code region
+
+$ likwid-mpirun -np <mpi_procs> -t <omp_procs> -g <eventset> -m <binary>
+
